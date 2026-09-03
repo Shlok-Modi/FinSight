@@ -1,0 +1,701 @@
+:root {
+  --bg-primary: #121212; /* Softer dark tone instead of pitch black */
+  --bg-secondary: #1E1E22; /* Card background */
+  --bg-tertiary: #27272C; /* Elevated background */
+  --border-primary: rgba(255, 255, 255, 0.09); /* subtle white variety */
+  --border-secondary: rgba(255, 255, 255, 0.16); /* slightly brighter white variety */
+  --text-primary: #ffffff;
+  --text-muted: #A1A1AA; /* Elevated secondary text (mid-tone grey) */
+  --text-dimmed: #9CA3AF; /* Elevated dim text (WCAG-compliant contrast) */
+  
+  --color-bullish: #10B981; /* Softened professional emerald green */
+  --color-bearish: #EF4444; /* Softened professional crimson red */
+  --color-neutral: #8E8E93;
+  
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Trebuchet MS', 'Trebuchet', -apple-system, sans-serif;
+  --font-title: 'Euclid Circular B', 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  
+  --header-height: 56px;
+  --content-scale: 1.0;
+  color-scheme: dark;
+}
+
+.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f7;
+  --bg-tertiary: #eef0f3;
+  --border-primary: rgba(0, 0, 0, 0.09);
+  --border-secondary: rgba(0, 0, 0, 0.16);
+  --text-primary: #000000;
+  --text-muted: #515154;
+  --text-dimmed: #86868b;
+  
+  --color-bullish: #008a47; /* darker green for contrast */
+  --color-bearish: #d9251b; /* darker red for contrast */
+  --color-neutral: #7e7e82;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow: hidden;
+  height: 100vh;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+select {
+  color-scheme: dark;
+}
+.light-theme select {
+  color-scheme: light;
+}
+select option {
+  background-color: #2e2e32 !important;
+  color: #ffffff !important;
+}
+.light-theme select option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Custom Scrollbar - ultra slim and minimal */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+/* Scrollable container setup */
+.scrollable-y {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+/* Mono spacing for numeric values */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Tickers and badges with softer curved edges */
+.sentiment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+}
+
+.sentiment-badge.bullish {
+  background-color: rgba(0, 176, 96, 0.08);
+  color: var(--color-bullish);
+  border: 1px solid rgba(0, 176, 96, 0.25);
+}
+
+.sentiment-badge.bearish {
+  background-color: rgba(255, 59, 48, 0.08);
+  color: var(--color-bearish);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+}
+
+.sentiment-badge.neutral {
+  background-color: rgba(142, 142, 147, 0.08);
+  color: var(--text-muted);
+  border: 1px solid rgba(142, 142, 147, 0.25);
+}
+
+/* General Layouts */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - var(--header-height));
+  overflow: hidden;
+  font-size: calc(1rem * var(--content-scale, 1.0));
+}
+
+/* Watchlist Sidebar */
+.sidebar {
+  width: calc(330px * var(--content-scale, 1.0));
+  border-left: 1px solid var(--border-primary);
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Stock grid details splits */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.detail-left {
+  grid-column: 1;
+  border-right: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.detail-right {
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: 1.1fr 0.9fr;
+  height: 100%;
+  overflow: hidden;
+}
+
+.detail-right-top {
+  grid-row: 1;
+  border-bottom: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.detail-right-bottom {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Custom header layout dropdown positioning with softer curves */
+.dropdown-overlay {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px !important;
+}
+
+/* Custom interactive transitions and border rounding */
+button, .clickable {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  border-radius: 6px;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s ease, transform 0.15s ease;
+}
+
+/* Selection and Hover */
+.list-item-hover:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.list-item-active {
+  background-color: var(--bg-tertiary) !important;
+  border-left: 3px solid var(--text-primary);
+}
+
+/* Animations */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.live-indicator {
+  width: 7px;
+  height: 7px;
+  background-color: var(--color-bullish);
+  border-radius: 50%;
+  animation: pulse-subtle 2s infinite ease-in-out;
+  display: inline-block;
+}
+
+.live-indicator.offline {
+  background-color: var(--text-dimmed);
+  animation: none;
+}
+
+/* Spacing and high-readability font formatting */
+.headline-text {
+  font-family: var(--font-title);
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.explainer-text {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Bubble Chart Layout & Visual Styling (Netflix / Minimalist style)
+   ========================================================================== */
+
+.bubble-chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble-canvas-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bubble-canvas-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.bubble-grid-line {
+  stroke: #121212;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.bubble-axis-line {
+  stroke: #222222;
+  stroke-width: 1.5;
+}
+
+.bubble-node {
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, filter 0.2s ease;
+  transform-origin: center;
+}
+
+.bubble-node:hover {
+  transform: scale(1.18);
+  filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 255, 255, 0.12));
+}
+
+.bubble-circle {
+  transition: stroke-width 0.2s ease;
+}
+
+.bubble-node:hover .bubble-circle {
+  stroke-width: 2.5px;
+}
+
+.bubble-text-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  fill: #ffffff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.bubble-text-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  fill: rgba(255, 255, 255, 0.6);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+/* Bubble Tooltip (Minimalist, translucent backdrop) */
+.bubble-tooltip {
+  position: absolute;
+  width: 330px;
+  background-color: rgba(10, 10, 10, 0.95);
+  border: 1px solid var(--border-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+  z-index: 500;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ==========================================================================
+   Welcome Briefing Overlay & Tilting Flashcard Styles
+   ========================================================================== */
+
+.briefing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px) brightness(0.2);
+  -webkit-backdrop-filter: blur(16px) brightness(0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Moving Market Ticker Tape Background */
+.moving-market-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  gap: 60px;
+}
+
+.track-left-to-right {
+  animation: ticker-ltr 45s linear infinite;
+}
+.track-right-to-left {
+  animation: ticker-rtl 40s linear infinite;
+}
+.track-left-to-right.slow {
+  animation: ticker-ltr 70s linear infinite;
+}
+.track-right-to-left.slow {
+  animation: ticker-rtl 65s linear infinite;
+}
+
+@keyframes ticker-ltr {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@keyframes ticker-rtl {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.briefing-close-btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: 1px solid var(--border-secondary);
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: rgba(20, 20, 20, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10000;
+}
+
+.briefing-close-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background-color: rgba(40, 40, 40, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Vertical Stack briefing layout styled for side-by-side vertical cards */
+.briefing-stack-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+  max-height: 95vh;
+}
+
+.briefing-vertical-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 10px 20px 30px 20px;
+  width: 100%;
+  max-height: calc(95vh - 120px);
+  scrollbar-gutter: stable;
+}
+
+.briefing-vertical-list .flashcard-card {
+  width: 245px;
+  flex-shrink: 0;
+}
+
+/* AI Hover Tooltip Popover */
+.news-card-wrapper {
+  position: relative;
+}
+
+.ai-hover-tooltip {
+  position: absolute;
+  bottom: 102%;
+  left: 20px;
+  right: 20px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 6px;
+  padding: 12px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(6px);
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.news-card-wrapper:hover .ai-hover-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.briefing-header {
+  text-align: center;
+  margin-bottom: 8px;
+  padding: 0 20px;
+}
+
+.briefing-title {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.briefing-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Flashcard Grid Layout */
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--bg-primary);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 3D Tilting Flashcard Node */
+.flashcard-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.2s ease, box-shadow 0.25s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.flashcard-card:hover {
+  border-color: var(--border-secondary);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.75);
+}
+
+.flashcard-source {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.flashcard-body {
+  flex: 1;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.flashcard-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.62rem;
+  color: var(--text-dimmed);
+  font-family: var(--font-mono);
+}
+
+.flashcard-ticker-badge {
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  background-color: var(--bg-tertiary);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.flashcard-headline-title {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.flashcard-chart-area {
+  height: 48px;
+  margin: 4px 0;
+  position: relative;
+}
+
+.flashcard-body-explanation {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flashcard-duplicates-list {
+  margin-top: auto;
+  font-size: 0.58rem;
+  color: var(--text-dimmed);
+  font-family: var(--font-mono);
+  border-top: 1px solid var(--border-primary);
+  padding-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Interactive Action Buttons styling */
+.interactive-action-btn {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-secondary);
+  background-color: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.interactive-action-btn:hover {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+  transform: translateY(-1px);
+}
+.interactive-action-btn:active {
+  transform: translateY(0);
+}
+.interactive-action-btn.active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-bullish);
+  border-color: var(--color-bullish);
+}
+.interactive-action-btn.active:hover {
+  background-color: var(--color-bullish);
+  color: #121212;
+  border-color: var(--color-bullish);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* Tooltip below container positioning */
+.ai-hover-tooltip.position-bottom {
+  bottom: auto;
+  top: 102%;
+  transform: translateY(-6px);
+}
+.news-card-wrapper:hover .ai-hover-tooltip.position-bottom {
+  transform: translateY(0);
+}
