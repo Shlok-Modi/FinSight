@@ -103,7 +103,20 @@ The backend runs on `http://localhost:4000`, the frontend on Vite's default dev 
 
 <br>
 
-## 👤 Author
+## 👥 Team
 
-**Shlok Modi** — CSE @ NIT Delhi
+FinSight is being developed collaboratively by:
+
+**Shlok Modi**
+R&D / Backend Development
+
+**Shivam Rattan**
+R&D / Frontend Development
+
+**Somya Garg**
+Backend Development
+
+All three contributors are working together on the design, research,
+architecture, and implementation of the project.
+
 [GitHub](https://github.com/Shlok-Modi) · [LinkedIn](https://linkedin.com/in/shlok-modi) · [LeetCode](https://leetcode.com/u/Shlok_Modi_05/)
